@@ -113,8 +113,8 @@ function addUser(user){
     users['users_list'].push(user);
 }
 
-app.delete('/users', (req, res) => {
-    const id = req.query.id;
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id'];
     if (id != undefined){
         let result = findUserById(id);
         if (result === undefined || result.length == 0)
