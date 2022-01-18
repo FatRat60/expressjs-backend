@@ -87,14 +87,26 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
+function idGen(length){
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++){
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 function findUserById(id){
     return users['users_list'].find( (user) => user['id'] === id);
 }
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    const id = idGen(6);
+    userToAdd.id = id;
     addUser(userToAdd);
-    res.status(200).end();
+    res.status(201).send(userToAdd).end();
 });
 
 function addUser(user){
@@ -110,7 +122,7 @@ app.delete('/users', (req, res) => {
         else{
             let index = users['users_list'].indexOf(result);
             users['users_list'].splice(index, 1);
-            res.status(200).send("User deleted.");
+            res.status(204).send("User deleted.");
         }
     }
     else{
